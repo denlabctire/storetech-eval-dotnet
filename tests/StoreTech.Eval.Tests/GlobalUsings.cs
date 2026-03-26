@@ -1,0 +1,16 @@
+global using System.Net;
+global using System.Net.Http.Json;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.Data.Sqlite;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.DependencyInjection.Extensions;
+global using Microsoft.Extensions.Options;
+global using storetech_eval_dotnet.Contracts.Cart;
+global using storetech_eval_dotnet.Contracts.Product;
+global using storetech_eval_dotnet.Data;
+global using storetech_eval_dotnet.Domain;
+global using storetech_eval_dotnet.Options;
+global using storetech_eval_dotnet.Services;
+global using Xunit;

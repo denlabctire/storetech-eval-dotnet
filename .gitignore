@@ -1,0 +1,20 @@
+# Build outputs
+bin/
+obj/
+
+# SQLite database files
+*.db
+
+# User-specific files
+*.user
+*.suo
+
+# IDE / VS Code
+.vs/
+.vscode/
+
+# macOS
+.DS_Store
+
+.copilot-tracking/
+.copilot/
