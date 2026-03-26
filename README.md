@@ -48,6 +48,9 @@ Replace `YOUR_USERNAME` with your actual GitHub username.
 **Requirements:**
 
 * .NET 10 SDK
+* dotnet cli
+* C# Dev extension kit
+
 
 **Verify your setup:**
 
