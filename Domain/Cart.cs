@@ -30,4 +30,22 @@ public sealed class Cart
             CreatedAtUtc = asOfUtc
         };
     }
+
+    public void RecalculateTotals(IReadOnlyList<storetech_eval_dotnet.Services.TaxRateResult> taxes)
+    {
+        Subtotal = decimal.Round(
+            Items.Sum(item => item.LineSubtotal),
+            2,
+            MidpointRounding.AwayFromZero);
+
+        TaxTotal = decimal.Round(
+            taxes.Sum(tax => Subtotal * (tax.Percentage / 100m)),
+            2,
+            MidpointRounding.AwayFromZero);
+
+        Total = decimal.Round(
+            Subtotal + TaxTotal,
+            2,
+            MidpointRounding.AwayFromZero);
+    }
 }

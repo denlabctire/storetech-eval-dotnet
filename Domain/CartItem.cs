@@ -17,4 +17,21 @@ public sealed class CartItem
     public Cart Cart { get; set; } = null!;
 
     public Product Product { get; set; } = null!;
+
+    public static CartItem Create(Cart cart, int productId, int quantity, decimal unitPrice) => new()
+    {
+        Id = Guid.NewGuid(),
+        ProductId = productId,
+        Quantity = quantity,
+        Cart = cart,
+        UnitPrice = unitPrice,
+        LineSubtotal = quantity * unitPrice
+    };
+
+    public void AddQuantity(int additionalQuantity, decimal unitPrice)
+    {
+        UnitPrice = unitPrice;
+        Quantity += additionalQuantity;
+        LineSubtotal = Quantity * UnitPrice;
+    }
 }

@@ -71,7 +71,7 @@ public sealed class CartService(
         var cart = await GetOrCreateCartAsync(request, taxLookup, asOfUtc, cancellationToken);
 
         UpsertItem(cart, product, request.Quantity);
-        RecalculateTotals(cart, taxLookup.Taxes);
+        cart.RecalculateTotals(taxLookup.Taxes);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -154,41 +154,13 @@ public sealed class CartService(
 
         if (existingItem is null)
         {
-            var newItem = new CartItem
-            {
-                Id = Guid.NewGuid(),
-                ProductId = product.ProductId,
-                Quantity = quantity,
-                Cart = cart,
-                UnitPrice = product.UnitPrice,
-                LineSubtotal = quantity * product.UnitPrice
-            };
-
+            var newItem = CartItem.Create(cart, product.ProductId, quantity, product.UnitPrice);    
+            
             dbContext.CartItems.Add(newItem);
 
             return;
         }
 
-        existingItem.UnitPrice = product.UnitPrice;
-        existingItem.Quantity += quantity;
-        existingItem.LineSubtotal = existingItem.Quantity * existingItem.UnitPrice;
-    }
-
-    private static void RecalculateTotals(Cart cart, IReadOnlyList<TaxRateResult> taxes)
-    {
-        cart.Subtotal = decimal.Round(
-            cart.Items.Sum(item => item.LineSubtotal),
-            2,
-            MidpointRounding.AwayFromZero);
-
-        cart.TaxTotal = decimal.Round(
-            taxes.Sum(tax => cart.Subtotal * (tax.Percentage / 100m)),
-            2,
-            MidpointRounding.AwayFromZero);
-
-        cart.Total = decimal.Round(
-            cart.Subtotal + cart.TaxTotal,
-            2,
-            MidpointRounding.AwayFromZero);
+        existingItem.AddQuantity(quantity, product.UnitPrice);
     }
 }
