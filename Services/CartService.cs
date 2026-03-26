@@ -9,8 +9,8 @@ namespace storetech_eval_dotnet.Services;
 
 public sealed class CartService(
     StoreTechDbContext dbContext,
-    // IProductService productService,
-    // ITaxService taxService,
+    IProductService productService,
+    ITaxService taxService,
     IOptions<CartOptions> cartOptions) : ICartService
 {
     private readonly CartOptions _cartOptions = cartOptions.Value;
@@ -122,7 +122,6 @@ public sealed class CartService(
         if (!request.CartId.HasValue)
         {
             var newCart = Cart.Create(taxLookup, asOfUtc);
-
             dbContext.Carts.Add(newCart);
             return newCart;
         }

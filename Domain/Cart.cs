@@ -19,4 +19,15 @@ public sealed class Cart
     public decimal Total { get; set; }
 
     public ICollection<CartItem> Items { get; set; } = new List<CartItem>();
+
+    public static Cart Create(storetech_eval_dotnet.Services.TaxLookupResult taxLookup, DateTime asOfUtc)
+    {
+        return new Cart
+        {
+            Id = Guid.NewGuid(),
+            Region = taxLookup.Region,
+            CurrencyCode = taxLookup.CurrencyCode,
+            CreatedAtUtc = asOfUtc
+        };
+    }
 }

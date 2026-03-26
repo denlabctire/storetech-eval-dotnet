@@ -46,10 +46,10 @@ public async Task<CartSaveResponse> SaveAsync(
 
 1. **Cart Creation/Retrieval**
    * If `CartId` is null, create a new `Cart` with the provided region and currency code
-   * If `CartId` has a value, retrieve the persisted cart by querying `dbContext.Carts.Include(c => c.Items)` and load the existing items
+   * If `CartId` has a value, retrieve the persisted cart by querying `dbContext` and load the existing items
 
 2. **Product Validation**
-   * Call `IProductService.GetProductPricingAsync(request.ProductId, request.CurrencyCode, DateTimeOffset.UtcNow)` to validate and resolve the product
+   * Call `IProductService` to validate and resolve the product
    * This method throws `ProductNotFoundException` when the product ID is invalid
 
 3. **Add Product to Cart**
@@ -61,11 +61,11 @@ public async Task<CartSaveResponse> SaveAsync(
    * Sum all `CartItem.LineSubtotal` values across the cart's items
 
 5. **Retrieve Applicable Taxes**
-   * Call `ITaxService.GetTaxesForRegionAsync(region, currencyCode, date)` to get all applicable tax rates for the cart's region
+   * Call `ITaxService` to get all applicable tax rates for the cart's region
 
 6. **Persist and Respond**
-   * Call `dbContext.SaveChangesAsync()` to persist all tracked changes
-   * Use `CartResponseMapper.ToResponse()` to build the `CartSaveResponse`
+   * Persist all tracked changes
+   * Use `CartResponseMapper` to build the `CartSaveResponse`
    * Return the response
 
 ### 2. Consider Edge Cases
@@ -200,7 +200,7 @@ POST /api/carts
 ```
 
 > [!NOTE]
-> The `cartId` field is a `Guid`. Pass `null` for new carts. The `region` field accepts short codes like `ON` or full codes like `CA-ON`; normalization is handled by `CartWorkflowNormalization`.
+> The `region` field accepts short codes like `ON` or full codes like `CA-ON`; normalization is handled by `CartWorkflowNormalization`.
 
 ## Testing
 
@@ -222,7 +222,7 @@ dotnet test --filter "FullyQualifiedName~CartServiceTests"
 * `PriceInfo` is a value object accessible through its aggregate root (`Product`) via navigation properties
 * `Cart` is an aggregate root that manages its own `CartItems` collection
 * `TaxInfo` is immutable reference data representing tax rules
-* EF Core handles persistence through change tracking: all modifications are persisted with a single `SaveChangesAsync()` call
+* EF Core handles persistence through change tracking: all modifications are persisted with a single `save` call
 * Entities validate their own invariants at the domain boundary
 
 ## Key Classes to Review
