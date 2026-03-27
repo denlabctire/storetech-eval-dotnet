@@ -1,19 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using storetech_eval_dotnet.Contracts.Cart;
-using storetech_eval_dotnet.Services;
 
 namespace storetech_eval_dotnet.Controllers;
 
 [ApiController]
 [Route("api/carts")]
-public sealed class CartController(ICartService cartService) : ControllerBase
+public sealed class CartController() : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType<IReadOnlyList<CartSummaryDto>>(StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<CartSummaryDto>>> GetCartsAsync(CancellationToken cancellationToken)
     {
-        var carts = await cartService.GetCartsAsync(cancellationToken);
-        return Ok(carts);
+       throw new NotImplementedException("This method is not implemented yet.");
     }
 
     [HttpPost]
@@ -26,24 +24,21 @@ public sealed class CartController(ICartService cartService) : ControllerBase
     {
         // TODO implement this method so that it validates the request, 
         // saves the cart and returns the appropriate response.
-        var response = null as CartSaveResponse;
-        return Ok(response);
+        throw new NotImplementedException("This method is not implemented yet.");
     }
 
     [HttpDelete]
     [ProducesResponseType<DeleteCartsResponse>(StatusCodes.Status200OK)]
     public async Task<ActionResult<DeleteCartsResponse>> DeleteCartsAsync(CancellationToken cancellationToken)
     {
-        var deletedCartCount = await cartService.DeleteCartsAsync(cancellationToken);
-        return Ok(new DeleteCartsResponse(deletedCartCount));
+        throw new NotImplementedException("This method is not implemented yet.");
     }
 
     [HttpDelete("purge-stale")]
     [ProducesResponseType<PurgeStaleCartsResponse>(StatusCodes.Status200OK)]
     public async Task<ActionResult<PurgeStaleCartsResponse>> PurgeStaleCartsAsync(CancellationToken cancellationToken)
     {
-        var purgedCartCount = await cartService.PurgeStaleCartsAsync(cancellationToken);
-        return Ok(new PurgeStaleCartsResponse(purgedCartCount));
+        throw new NotImplementedException("This method is not implemented yet.");
     }
 }
 
